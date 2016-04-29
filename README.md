@@ -2,7 +2,7 @@
 
 Implementation of "Spectrum The No Hassle Colorpicker" https://github.com/bgrins/spectrum in Yii2
 
-Ussage in active form
+Usage in active form
 
 ```PHP
   <?= $form->field($model, 'color')->widget('\xunlight\spectrum\Spectrum', [
