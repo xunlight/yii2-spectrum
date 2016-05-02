@@ -135,12 +135,11 @@ class Spectrum extends \yii\widgets\InputWidget
             $events .= "'" . $event . "' : " . $code . ',';
         }
         $events .= '}';
-        
         if($events!='{}'){
-            if(empty($options))
-                $options = "$.merge($options,$events)";
-                else 
-                    $options = $events;
+            if(!empty($options))
+                $options = "\$.merge($options,$events)";
+            else 
+                $options = $events;
         }
         
         return $options;
