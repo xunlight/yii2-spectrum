@@ -66,7 +66,16 @@ class Spectrum extends \yii\widgets\InputWidget
             maxSelectionSize: int,
             palette: [[string]],
             selectionPalette: [string],
-            
+        }
+     */
+    public $clientOptions = [];
+    
+    /**
+     * @var array the options for the Spectrum JS plugin.
+     * Please refer to the Spectrum JS plugin Web page for possible events.
+     * @see http://bgrins.github.io/spectrum/#events
+     * 
+        {
             //# Events
             move: function(tinycolor) { },
             show: function(tinycolor) { },
@@ -74,8 +83,7 @@ class Spectrum extends \yii\widgets\InputWidget
             beforeShow: function(tinycolor) { },
         }
      */
-    public $clientOptions = [];
-    
+    public $clientEvents = [];
     /**
      * @inheritdoc
      */
@@ -105,11 +113,38 @@ class Spectrum extends \yii\widgets\InputWidget
         }
         
         //JS init function
-        $id = $this->options['id'];
-        $options =  json_encode($this->clientOptions);
+        $id      = $this->options['id'];
+        $options = $this->addEventsToOptions(json_encode($this->clientOptions));
+        
         $view->registerJs( "$('#{$id}').spectrum($options);" );
     }
     
+    /**
+	 * Add events to options for intialization process
+	 * 
+	 * @param    string {} object for initialization of Spectrum
+	 * @return   string {} object for initialization of Spectrum
+	 * 
+	 * @since    1.0.0
+	 *
+	 */
+    public function addEventsToOptions($options){
+        //build events string
+        $events = '{';
+        foreach($this->clientEvents as $event => $code){
+            $events .= "'" . $event . "' : " . $code . ',';
+        }
+        $events .= '}';
+        
+        if($events!='{}'){
+            if(empty($options))
+                $options = "$.merge($options,$events)";
+                else 
+                    $options = $events;
+        }
+        
+        return $options;
+    }
     
 }
 /**
@@ -129,8 +164,8 @@ class SpectrumAsset extends \yii\web\AssetBundle
     public function init()
     {
         $this->sourcePath = dirname(__FILE__) . '/assets/';
-        $this->js[]  = 'spectrum.js';
-        $this->css[] = 'spectrum.css';
+        $this->js  = [ 'spectrum.js' ];
+        $this->css = [ 'spectrum.css' ];
         parent::init();
     }
 }
