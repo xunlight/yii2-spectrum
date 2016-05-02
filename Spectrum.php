@@ -77,10 +77,13 @@ class Spectrum extends \yii\widgets\InputWidget
      * 
         {
             //# Events
+            change: function(tinycolor) { },
             move: function(tinycolor) { },
             show: function(tinycolor) { },
             hide: function(tinycolor) { },
             beforeShow: function(tinycolor) { },
+            dragStart: function(e, tinycolor) { },
+            dragstop: function(e, tinycolor) { },
         }
      */
     public $clientEvents = [];
@@ -137,7 +140,7 @@ class Spectrum extends \yii\widgets\InputWidget
         $events .= '}';
         if($events!='{}'){
             if(!empty($options))
-                $options = "\$.merge($options,$events)";
+                $options = "\$.extend($options,$events)";
             else 
                 $options = $events;
         }
